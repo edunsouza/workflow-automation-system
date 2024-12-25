@@ -1,5 +1,5 @@
 {
-  "name": "workflows-svc",
+  "name": "scheduler-svc",
   "version": "1.0.0",
   "author": "edunsouza",
   "main": "index.js",

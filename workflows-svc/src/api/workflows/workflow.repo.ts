@@ -48,11 +48,11 @@ export class WorkflowRepo {
 
   async getWorkflowById(workflow_id: string) {
     // todo: store query metrics
-    const workflow = await Workflow.findOne({ workflow_id }).exec();
+    const workflow = await Workflow.findOne({ workflow_id }).lean();
 
-    return workflow?.toObject() as WorkflowDB;
+    return workflow as WorkflowDB;
   }
 }
 
-const workflowService = new WorkflowRepo();
-export default workflowService;
+const workflowRepo = new WorkflowRepo();
+export default workflowRepo;

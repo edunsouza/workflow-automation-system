@@ -1,8 +1,8 @@
-import { getProducer } from '../../shared/kafka.js';
+import { getProducer } from '../shared/producer.js';
 
 const EXECUTION_TOPIC = 'workflow.execution';
 
-export class WorkflowEmitter {
+export class WorkflowProducer {
   constructor() { }
 
   async emitExecutionRequest(workflowId: string) {
@@ -18,5 +18,5 @@ export class WorkflowEmitter {
   }
 }
 
-const workflowEmitter = new WorkflowEmitter();
-export default workflowEmitter;
+const workflowProducer = new WorkflowProducer();
+export default workflowProducer;

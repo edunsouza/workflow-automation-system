@@ -4,10 +4,10 @@ import { createWorkflow, triggerWorkflow } from './workflow.controller.js';
 
 const router = express.Router();
 
-// create workflow
+// todo: add middleware to store request metrics
+
 router.post('/', createWorkflow);
 
-// trigger workflow
 router.post('/:id/trigger', triggerWorkflow);
 
 // archive workflow
