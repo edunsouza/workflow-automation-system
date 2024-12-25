@@ -1,4 +1,4 @@
-import { getProducer } from '../../shared/kafka.js';
+import { getProducer } from '../../shared/producer.js';
 
 const EXECUTION_TOPIC = 'workflow.execution';
 
