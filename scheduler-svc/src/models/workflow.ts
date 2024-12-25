@@ -1,4 +1,4 @@
-import mongoose, { Schema } from 'mongoose';
+import mongoose, { InferRawDocType, Schema } from 'mongoose';
 
 export enum WorkflowTrigger {
   MANUAL = 'manual',
@@ -28,16 +28,16 @@ const ActionSchema = new Schema({
 export enum WorkflowStatus {
   ACTIVE = 'active',
   SCHEDULED = 'scheduled',
-  LOCKED = 'locked',
-  ARCHIVED = 'archived'
+  LOCKED = 'locked'
 }
 
-const WorkflowSchema = new Schema({
+const workflowSchema = {
   workflow_id: { type: String, unique: true },
   status: { type: String, enum: WorkflowStatus, default: WorkflowStatus.ACTIVE },
   created_at: { type: Date, default: Date.now },
   trigger: TriggerSchema,
   actions: [ActionSchema]
-});
-
+};
+const WorkflowSchema = new Schema(workflowSchema);
+export type WorkflowDB = InferRawDocType<typeof workflowSchema>;
 export const Workflow = mongoose.model('Workflow', WorkflowSchema, 'workflows');

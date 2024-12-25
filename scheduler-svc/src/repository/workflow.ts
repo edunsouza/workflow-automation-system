@@ -1,27 +1,8 @@
 import {
   Workflow,
-  WorkflowAction,
-  WorkflowStatus,
-  WorkflowTrigger
+  WorkflowDB,
+  WorkflowStatus
 } from '../models/workflow.js';
-
-export type WorkflowDB = {
-  workflow_id: string;
-  status: WorkflowStatus;
-  created_at?: Date;
-  trigger: {
-    type: WorkflowTrigger;
-    interval?: number;
-    next_run?: Date | string;
-  };
-  actions: {
-    action_id?: number;
-    type: WorkflowAction;
-    url?: string;
-    method?: string;
-    message?: string;
-  }[];
-};
 
 export class WorkflowRepo {
   constructor() { }
@@ -35,10 +16,10 @@ export class WorkflowRepo {
       'trigger.next_run': { $lte: now }
     }).lean();
 
-    return workflows as WorkflowDB[];
+    return workflows;
   }
 
-  async updateWorkflowStatusToScheduled(workflow_id: string) {
+  async scheduleWorkflow(workflow_id: string) {
     // todo: store query metrics
     const result = await Workflow.updateOne({ workflow_id }, {
       status: WorkflowStatus.SCHEDULED

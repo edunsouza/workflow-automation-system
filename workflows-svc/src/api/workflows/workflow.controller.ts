@@ -18,7 +18,7 @@ export const createWorkflow = async (req: Req<WorkflowCreate>, res: Response) =>
 
     http.sendCreated(res, { workflowId: workflow.workflowId });
   } catch (error) {
-    logger.error(`[Creation Error]: workflow id "${workflow.workflowId}"`);
+    logger.error(`[Creation Error]: workflow id ${workflow.workflowId}`);
     logger.error(error);
 
     if (error instanceof BadRequestException) {
@@ -34,11 +34,11 @@ export const triggerWorkflow = async (req: Request<{ id: string }>, res: Respons
   const workflowId = req.params.id;
 
   try {
-    await workflowService.triggerWorkflow(workflowId);
+    const { status } = await workflowService.triggerWorkflow(workflowId);
 
-    http.sendSuccess(res, { triggered: true });
+    http.sendSuccess(res, { status });
   } catch (error) {
-    logger.error(`[Trigger Error]: workflow id "${workflowId}"`);
+    logger.error(`[Trigger Error]: workflow id ${workflowId}`);
     logger.error(error);
 
     if (error instanceof BadRequestException) {

@@ -12,7 +12,7 @@ export class WorkflowEmitter {
       topic: EXECUTION_TOPIC,
       messages: [{
         key: workflowId,
-        value: JSON.stringify({ workflowId }),
+        value: JSON.stringify({ workflow_id: workflowId }),
       }],
     });
   }

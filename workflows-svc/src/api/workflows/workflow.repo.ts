@@ -5,6 +5,7 @@ import {
   WorkflowTrigger
 } from '../../models/workflow.js';
 
+// TODO: check mongoose InferSchemaType to auto generate this
 export type WorkflowDB = {
   workflow_id: string;
   status: WorkflowStatus;
@@ -51,6 +52,15 @@ export class WorkflowRepo {
     const workflow = await Workflow.findOne({ workflow_id }).lean();
 
     return workflow as WorkflowDB;
+  }
+
+  async scheduleWorkflow(workflow_id: string) {
+    // todo: store query metrics
+    const result = await Workflow.updateOne({ workflow_id }, {
+      status: WorkflowStatus.SCHEDULED
+    });
+
+    return result.modifiedCount;
   }
 }
 

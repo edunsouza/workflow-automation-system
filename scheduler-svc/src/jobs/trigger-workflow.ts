@@ -14,7 +14,7 @@ export const triggerWorkflow = async (repo: WorkflowRepo, producer: WorkflowProd
   logger.info(`Scheduling ${workflows.length} workflow(s)`);
 
   workflows.forEach(async ({ workflow_id }) => {
-    await repo.updateWorkflowStatusToScheduled(workflow_id);
+    await repo.scheduleWorkflow(workflow_id);
     producer.emitExecutionRequest(workflow_id);
   });
 

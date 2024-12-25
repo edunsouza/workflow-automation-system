@@ -28,8 +28,7 @@ const ActionSchema = new Schema({
 export enum WorkflowStatus {
   ACTIVE = 'active',
   SCHEDULED = 'scheduled',
-  LOCKED = 'locked',
-  ARCHIVED = 'archived'
+  LOCKED = 'locked'
 }
 
 const WorkflowSchema = new Schema({

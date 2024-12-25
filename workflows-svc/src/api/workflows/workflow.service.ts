@@ -137,17 +137,24 @@ export class WorkflowService {
 
     await this.repo.insertWorkflow(workflowDB);
 
-    this.logger.info(`Workflow "${workflowDB.workflow_id}" created`);
+    this.logger.info(`Workflow ${workflowDB.workflow_id} created`);
   }
 
-  async triggerWorkflow(workflowId: string) {
-    this.validateWorkflowId(workflowId);
-    const workflowDB = await this.repo.getWorkflowById(workflowId);
+  async triggerWorkflow(id: string) {
+    this.validateWorkflowId(id);
+    const workflowDB = await this.repo.getWorkflowById(id);
     this.validateTriggerRequest(workflowDB);
 
-    await this.emitter.emitExecutionRequest(workflowId);
+    if (workflowDB.status !== WorkflowStatus.ACTIVE) {
+      this.logger.info(`Skipping workflow ${id} (not active)`);
+      return { status: 'workflow in progress' };
+    }
 
-    this.logger.info(`Workflow ${workflowId} triggered`);
+    await this.repo.scheduleWorkflow(id);
+    await this.emitter.emitExecutionRequest(id);
+
+    this.logger.info(`Workflow ${id} triggered`);
+    return { status: 'workflow triggered' };
   }
 }
 
