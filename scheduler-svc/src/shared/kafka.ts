@@ -6,7 +6,7 @@ let producer: Producer;
 export const getProducer = async () => {
   if (!producer) {
     const kafka = new Kafka({
-      clientId: 'workflows-svc',
+      clientId: 'scheduler-svc',
       brokers: [process.env.KAFKA_URL]
     });
 
