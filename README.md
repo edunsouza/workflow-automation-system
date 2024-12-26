@@ -72,8 +72,50 @@ Currently if you create a manual workflow you can trigger it how many times you 
 #### Solution
 To fix that we can add a field to `trigger` in `workflows` collection. We can simply add a `trigger.status` of "busy" or "pending" to indicate to the `workflow-svc` that this workflow needs retry so it can return the proper status to the users and prevent another trigger while in that state. The responsible to manage that new field would be `runner-svc` to set and unset when executions fail/complete.
 
+### Repo - Mongoose coupling
+Currently there's no layer of abstraction between a Repo class and a Mongoose model. Ideally we would add a layer of abstraction so Repos wouldn't depend on mongoose (not even mongodb).
+#### Solution
+Add a layer of abstraction and pass those Entity handlers to the Repos constructor.
+
 ## Tests
 There are no unit/e2e tests written yet but the project was designed for dependency injection and modular code. Entities that hold business logic, like Service/Worker/Job, export the classes/functions to be tested and also a default instance to be used as a singleton in the project.
+
+### Example
+```
+describe('ExecutionWorker', () => {
+  describe('locking / unlocking', () => {
+    let executionRepoMock: ExecutionRepo = null;
+    let workflowRepoMock: WorkflowRepo = null;
+    let worker: ExecutionWorker = null;
+
+    beforeEach(() => {
+      executionRepoMock = {
+        create: mock.fn(),
+        getPending: mock.fn(),
+        setComplete: mock.fn(),
+        setFailed: mock.fn(),
+        trackFailure: mock.fn()
+      };
+      workflowRepoMock = {
+        getScheduled: mock.fn(),
+        setNextRun: mock.fn(),
+        lock: mock.fn(),
+        unlock: mock.fn()
+      };
+      worker = new ExecutionWorker(workflowRepoMock, executionRepoMock);
+    });
+
+    it('should lock workflow before working', async () => {
+      const workflowId = 'example-id';
+
+      await worker.run(workflowId);
+      const lockCalls = (workflowRepoMock.lock as Mock<any>).mock.calls[0];
+
+      assert.deepEqual(lockCalls.arguments[0], workflowId);
+    });
+  });
+});
+```
 
 ## Other
 Logs, metrics and health checks are suggested in the code. Http routes are modular so we could easily add a `/v2` API. SOLID principles and design patterns are applied.
