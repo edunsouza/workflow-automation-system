@@ -7,7 +7,7 @@ import {
   ExecutionActionDB
 } from '../models/execution.js';
 
-const DEFAULT_RETRIES = 3;
+const DEFAULT_RETRIES = 4;
 
 const logInfo = (message: string) => logger.info('[DB]: ' + message);
 
@@ -54,9 +54,8 @@ export class ExecutionRepo {
 
     await Execution.updateOne({ id }, {
       $inc: { retries: -1 },
+      $addToSet: { executed_actions: actions },
       last_failed_action: failedAction.action_id || 0,
-      // TODO: replace each entry by action_id
-      executed_actions: actions
     });
 
     logInfo(`Tracking failed execution attempt for workflow ${id}`);

@@ -2,7 +2,7 @@ import mongoose, { Schema, InferSchemaType } from 'mongoose';
 
 export enum WorkflowTrigger {
   MANUAL = 'manual',
-  SCHEDULED = 'scheduled'
+  PERIODIC = 'periodic'
 }
 
 export enum WorkflowAction {

@@ -20,14 +20,12 @@ export class WorkflowRepo {
     return scheduled;
   }
 
-  async setNextRun(id: string, nextRun: number) {
-    const next = new Date(nextRun);
-
+  async setNextRun(id: string, nextRun: number | null) {
     await Workflow.updateOne({ workflow_id: id }, {
-      $set: { 'trigger.next_run': next }
+      $set: { 'trigger.next_run': nextRun }
     });
 
-    logInfo(`Set workflow next_run to ${next.toLocaleString()}`);
+    logInfo(`Set workflow next_run to ${nextRun}`);
   }
 
   async lock(id: string): Promise<void> {

@@ -1,5 +1,5 @@
 // TODO: use real logger
-const withTime = (text: string) => [new Date().toISOString(), '-', text].join(' ');
+const withTime = (text: string) => `${new Date().toISOString().substring(0, 19)}: ${text}`;
 
 export const logger: Logger = {
   info: (message: string) => console.log(withTime(message)),

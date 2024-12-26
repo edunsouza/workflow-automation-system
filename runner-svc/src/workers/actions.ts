@@ -1,34 +1,42 @@
 import { Worker } from '../shared/interfaces.js';
 import { ExecutionActionDB, ActionStatus } from '../models/execution.js';
-import { WorkflowActionDB } from '../models/workflow.js';
+import { WorkflowActionDB, WorkflowAction } from '../models/workflow.js';
 
-type ActionResult = {
-  failed: boolean;
-  result: ExecutionActionDB
-};
+type ActionResult = ExecutionActionDB;
 
 export class ActionWorker implements Worker<ActionResult> {
   constructor() { }
 
-  // TODO
   async run(action: WorkflowActionDB): Promise<ActionResult> {
+    switch (action.type) {
+      case WorkflowAction.HTTP_REQUEST:
+        return new HttpRequestAction().run(action);
+      case WorkflowAction.LOG:
+        return new LogAction().run(action);
+    }
+  }
+}
+
+class HttpRequestAction implements Worker<ActionResult> {
+  async run({ action_id, method, url }: WorkflowActionDB): Promise<ActionResult> {
+    const response = await fetch(url, { method }).catch(() => ({ status: 500, text: async () => '' }));
+    const { status } = response;
+    const content = await response.text().catch(e => String(e));
+
     return {
-      failed: true,
-      result: {
-        action_id: action.action_id,
-        status: ActionStatus.FAILED,
-        logs: 'faled :('
-      }
+      action_id,
+      status: status < 400 ? ActionStatus.OK : ActionStatus.FAILED,
+      logs: `${url} [STATUS ${status}] => ${content.substring(0, 50)}`
     };
   }
 }
 
-class HttpRequestAction implements Worker {
-  // TODO
-  async run(): Promise<void> { }
-}
-
-class LogAction implements Worker {
-  // TODO
-  async run(): Promise<void> { }
+class LogAction implements Worker<ActionResult> {
+  async run({ action_id, message }: WorkflowActionDB): Promise<ActionResult> {
+    return {
+      action_id,
+      status: ActionStatus.OK,
+      logs: `stdout: ${message}`
+    };
+  }
 }
