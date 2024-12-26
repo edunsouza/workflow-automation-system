@@ -7,7 +7,7 @@ import {
 export class WorkflowRepo {
   constructor() { }
 
-  async getScheduledWorkflows(): Promise<WorkflowDB[]> {
+  async getSchedulableWorkflows(): Promise<WorkflowDB[]> {
     // todo: store query metrics
     const now = new Date();
 

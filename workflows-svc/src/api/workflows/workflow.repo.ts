@@ -31,7 +31,7 @@ export class WorkflowRepo {
     const { type, interval } = wf.trigger;
     const now = new Date();
 
-    if (type === WorkflowTrigger.SCHEDULED) {
+    if (type === WorkflowTrigger.PERIODIC) {
       // todo: enforce a minimum interval time (ex: 5000)
       wf.trigger.next_run = new Date(now.getTime() + interval);
     }

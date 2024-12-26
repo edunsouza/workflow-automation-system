@@ -2,9 +2,9 @@ import { logger } from '../shared/logger.js';
 import workflowRepo, { WorkflowRepo } from '../repository/workflow.js';
 import workflowProducer, { WorkflowProducer } from '../events/workflow.producer.js';
 
-export const triggerWorkflow = async (repo: WorkflowRepo, producer: WorkflowProducer) => {
+const triggerWorkflow = async (repo: WorkflowRepo, producer: WorkflowProducer) => {
   // todo: paginate documents from repo + send to kafka in batches
-  const workflows = await repo.getScheduledWorkflows();
+  const workflows = await repo.getSchedulableWorkflows();
 
   if (!workflows.length) {
     // logger.info('There are no workflows to trigger right now');

@@ -50,9 +50,9 @@ export class WorkflowService {
       throw new BadRequestException(`Invalid trigger type. Options are: [${triggerOptions}]`);
     }
 
-    const isScheduled = wf.trigger.type === WorkflowTrigger.SCHEDULED;
-    if (isScheduled && !wf.trigger.interval) {
-      throw new BadRequestException('Scheduled workflows require interval. Ex: 30s');
+    const isPeriodic = wf.trigger.type === WorkflowTrigger.PERIODIC;
+    if (isPeriodic && !wf.trigger.interval) {
+      throw new BadRequestException('Periodic workflows require interval. Ex: 30s');
     }
   }
 
@@ -105,8 +105,8 @@ export class WorkflowService {
       throw new BadRequestException('Invalid workflow');
     }
 
-    if (wf.trigger?.type === WorkflowTrigger.SCHEDULED) {
-      throw new BadRequestException('Scheduled workflows cannot be triggered manually');
+    if (wf.trigger?.type === WorkflowTrigger.PERIODIC) {
+      throw new BadRequestException('Periodic workflows cannot be triggered manually');
     }
   }
 

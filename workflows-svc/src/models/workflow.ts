@@ -2,7 +2,7 @@ import mongoose, { Schema } from 'mongoose';
 
 export enum WorkflowTrigger {
   MANUAL = 'manual',
-  SCHEDULED = 'scheduled'
+  PERIODIC = 'periodic'
 }
 
 const TriggerSchema = new Schema({
