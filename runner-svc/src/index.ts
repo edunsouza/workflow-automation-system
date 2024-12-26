@@ -7,7 +7,7 @@ import { connectDB, disconnectDB } from './shared/mongodb.js';
 import { startProcessor } from './processor.js';
 import app from './server.js';
 
-const PORT = process.env.PORT || 8080;
+const PORT = process.env.PORT || 8083;
 
 const startServer = async () => {
   await getConsumer();

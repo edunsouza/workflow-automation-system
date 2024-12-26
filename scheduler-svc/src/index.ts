@@ -7,7 +7,7 @@ import { connectDB, disconnectDB } from './shared/mongodb.js';
 import { startScheduler, stopScheduler, SchedulerRef } from './scheduler.js';
 import app from './server.js';
 
-const PORT = process.env.PORT || 8080;
+const PORT = process.env.PORT || 8082;
 let schedulerRef: SchedulerRef = null;
 
 const startServer = async () => {

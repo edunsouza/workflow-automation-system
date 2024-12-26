@@ -6,7 +6,7 @@ import { getProducer, disconnectProducer } from './shared/kafka.js';
 import { connectDB, disconnectDB } from './shared/mongodb.js';
 import app from './server.js';
 
-const PORT = process.env.PORT || 8080;
+const PORT = process.env.PORT || 8081;
 
 const startServer = async () => {
   await getProducer();
